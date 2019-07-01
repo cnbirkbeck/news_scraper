@@ -62,7 +62,7 @@ $(()=>{
 
             // if there is no note
             if (totalNotes == 0) {
-                let message = `<small class="text-muted">This article doesn't have any note yet.</small>`;
+                let message = `<small class="text-muted">This article doesn't have any notes yet.</small>`;
                 $('.modal-body').prepend(message);
             }
             // if there is/are note(s)
