@@ -70,6 +70,98 @@ module.exports = (app)=>{
                 console.log(`error while getting data from url: ${error}`);
             });
         
+        });
+    });
+
+    //show articles after scraping
+    app.get("/articles", (req, res)=>{
+        db.Article.find({})
+        .sort({timestamp: -1})
+        .then((dbArticle)=>{
+            let articleObj = {article: dbArticle};
+
+            //render page with articles found
+            res.render("index", articleObj);
         })
-    })
-}
+        .catch((err)=>{
+            res.json(err);
+        });
+    });
+     // save article
+     app.put('/article/:id', (req, res)=>{
+        let id = req.params.id;
+
+        db.Article.findByIdAndUpdate(id, {$set: {saved: true}})
+        .then((dbArticle)=>{
+            res.json(dbArticle);
+        })
+        .catch((err)=>{
+            res.json(err);
+        });
+    });
+
+    // remove article from page 'saved'
+    app.put('/article/remove/:id', (req, res)=>{
+        let id = req.params.id;
+
+        db.Article.findByIdAndUpdate(id, {$set: {saved: false}})
+        .then((dbArticle)=>{
+            res.json(dbArticle);
+        })
+        .catch((err)=>{
+            res.json(err);
+        });
+    });
+
+    // get current notes
+    app.get('/article/:id', (req,res)=>{
+        let id = req.params.id;
+
+        // cannot get notes associated with article, only the very first one
+        db.Article.findById(id)
+        .populate('note')
+        .then((dbArticle)=>{
+            res.json(dbArticle);
+        })
+        .catch((err)=>{
+            res.json(err);
+        });
+    });
+
+    // save new note
+    app.post('/note/:id', (req, res)=>{
+        let id = req.params.id;
+
+        db.Note.create(req.body)
+        .then((dbNote)=>{
+            return db.Article.findOneAndUpdate({
+                _id: id
+            }, {
+                $push: {
+                    note: dbNote._id
+                }
+            }, {
+                new: true, upsert: true
+            });
+        })
+        .then((dbArticle)=>{
+            res.json(dbArticle);
+        })
+        .catch((err)=>{
+            res.json(err);
+        });
+    });
+
+    // delete note
+    app.delete('/note/:id', (req, res)=>{
+        let id = req.params.id;
+        
+        db.Note.remove({_id: id})
+        .then((dbNote)=>{
+            res.json({message: 'note removed!'});
+        })
+        .catch((err)=>{
+            res.json(err);
+        });
+    });
+};
