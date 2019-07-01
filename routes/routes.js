@@ -24,7 +24,7 @@ module.exports = (app)=>{
     });
 
     //saved articles page
-    app.get("/saved". (req, res)=>{
+    app.get("/saved", (req, res)=>{
         db.Article.find({saved: true})
         .then((dbArticle)=>{
             let articleObj = {article : dbArticle};

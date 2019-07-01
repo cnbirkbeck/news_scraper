@@ -9,7 +9,9 @@ const mongoose = require ("mongoose");
 const expHandlebars = require ("express-handlebars");
 
 let PORT = process.env.PORT || 3000;
-let MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/news_scraper";
+// If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
+let MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+//let MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/news_scraper";
 
 //initialize express
 const app = express ();
@@ -29,7 +31,13 @@ app.set("view engine", "handlebars");
 
 //database configuration
 mongoose.Promise = Promise;
-mongoose.connect(MONGODB_URI, {userMongoClient: true});
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+
+
+// If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
+//var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+
+//mongoose.connect(MONGODB_URI);
 
 // check connection status
 let db = mongoose.connection;
