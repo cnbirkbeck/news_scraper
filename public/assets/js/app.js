@@ -1,7 +1,7 @@
 $(()=>{
     // declare functions
     const scrapeArticles = ()=>{
-        $.get('/scrape')
+        app.get('/scrape')
         .then((data)=>{
             $('body').html(data);
         });
@@ -94,7 +94,7 @@ $(()=>{
                 data: {body: content}
             })
             .then((data)=>{
-                // clear textarea
+                // clear text area
                 $('.note-content').val('');
                 // hide modal
                 $('.modal').modal('hide');
