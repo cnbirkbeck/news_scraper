@@ -7,6 +7,7 @@ const bodyParser = require ("body-parser");
 const logger = require("morgan");
 const mongoose = require ("mongoose");
 const expHandlebars = require ("express-handlebars");
+//this is a note to test heroku
 
 let PORT = process.env.PORT || 3000;
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
