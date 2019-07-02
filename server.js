@@ -31,7 +31,7 @@ app.set("view engine", "handlebars");
 
 //database configuration
 mongoose.Promise = Promise;
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true });
 
 
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
